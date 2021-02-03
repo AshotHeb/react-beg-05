@@ -6,3 +6,4 @@ export default function Card({ img, text, imgAlt, active }) {
             <p>{text}</p>
         </div>
     )
+}
