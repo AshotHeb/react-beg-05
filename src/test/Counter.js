@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Country from './Country';
 
 class Counter extends Component {
-    // constructor(props){
+    // constructor(props) {
     //     super();
     //     this.state = {
     //         counter: props.counter,
-    //         componentName: 'Counter'
+    //         componentName: 'Counter',
+    //         isArmenia: true
     //     }
+    //     this.toggleChangeCountry = this.toggleChangeCountry.bind(this)
     // }
     state = {
         counter: this.props.counter,
@@ -23,7 +25,7 @@ class Counter extends Component {
     }
     toggleChangeCountry = () => {
         this.setState({
-            isArmenia:!this.state.isArmenia
+            isArmenia: !this.state.isArmenia
         })
     }
     render() {
@@ -39,8 +41,11 @@ class Counter extends Component {
                         +
                 </button>
                 </div>
-            <Country isArmenia={this.state.isArmenia} toggleChangeCountry={this.toggleChangeCountry}/>
-              
+                <Country
+                    isArmenia={this.state.isArmenia}
+                    toggleChangeCountry={this.toggleChangeCountry}
+                />
+
             </div>
         )
     }

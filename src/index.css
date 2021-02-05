@@ -9,14 +9,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.card {
+.task {
   width: 150px;
   padding: 25px;
   border: 1px solid black;
   border-radius: 5px;
 }
 
-.card_wrapper {
+.task_wrapper {
   display: flex;
   justify-content: space-between;
   width: 70%;
@@ -31,4 +31,7 @@ code {
 }
 .country.armenia {
   color:blue
+}
+.img {
+  width:150px;
 }
