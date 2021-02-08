@@ -2,9 +2,12 @@ import React from 'react';
 
 class ToDo extends React.Component {
     state = {
-        tasks: ['Task 1', 'Task 2 ', 'Task 3']
+        tasks: []
     }
     render() {
+        const { tasks } = this.state;
+
+
         const Tasks = this.state.tasks.map((task, index) => {
             return (
                 <p key={index} className="task">
@@ -12,6 +15,10 @@ class ToDo extends React.Component {
                 </p>
             )
         })
+
+
+        // if (!tasks.length)
+        //     return <div>Tasks is Empty</div>
 
         return (
             <div>
@@ -24,6 +31,7 @@ class ToDo extends React.Component {
                     <button>Add</button>
                 </div>
                 <div className="task_wrapper">
+                    {!tasks.length && <div>Tasks is Empty</div>}
                     {Tasks}
                 </div>
             </div>
