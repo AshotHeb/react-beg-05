@@ -1,5 +1,6 @@
 import React from 'react';
 import Task from '../Task/Task';
+import AddTask from '../AddTask/AddTask';
 
 class ToDo extends React.Component {
     state = {
@@ -28,7 +29,8 @@ class ToDo extends React.Component {
         return (
             <div>
                 <h1>ToDo Component</h1>
-                <div>
+                <AddTask />
+                {/* <div>
                     <input
                         type="text"
                         placeholder="Add Task"
@@ -40,10 +42,8 @@ class ToDo extends React.Component {
                         onClick={this.handleReset}
                     >Reset
                     </button>
-                </div>
-                <div>
-                    <p>{inputValue}</p>
-                </div>
+                </div> */}
+     
                 <div className="task_wrapper">
                     {!tasks.length && <div>Tasks is Empty</div>}
                     {Tasks}
