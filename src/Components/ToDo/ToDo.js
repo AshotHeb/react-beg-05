@@ -1,50 +1,41 @@
 import React from 'react';
 import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
+import styles from './todo.module.css';
 
 class ToDo extends React.Component {
     state = {
-        tasks: ['Task 1 ', 'Task 2'],
-        inputValue: ''
+        tasks: ['Task 1 ', 'Task 2', 'Task 3'],
+    }
+    handleSubmit = (value) => {
+        if (!value) return;
+        const tasks = [...this.state.tasks];
+        tasks.push(value);
+        this.setState({
+            tasks
+        });
     }
 
-    handleChange = (e) => {
-        this.setState({
-            inputValue: e.target.value
-        })
-    }
-    handleReset = () => {
-        this.setState({
-            inputValue: ''
-        })
-    }
     render() {
-        const { tasks, inputValue } = this.state;
+        const { tasks } = this.state;
         const Tasks = this.state.tasks.map((task, index) => {
             return (
-                <Task task={task} key={index} />
+                <Task
+                    task={task}
+                    key={index}
+                    active={index === 1}
+                    active2 = {index === 2}
+                />
             )
         })
 
         return (
             <div>
                 <h1>ToDo Component</h1>
-                <AddTask />
-                {/* <div>
-                    <input
-                        type="text"
-                        placeholder="Add Task"
-                        onChange={this.handleChange}
-                        value={inputValue}
-                    />
-                    <button>Add</button>
-                    <button
-                        onClick={this.handleReset}
-                    >Reset
-                    </button>
-                </div> */}
-     
-                <div className="task_wrapper">
+                <AddTask
+                    handleSubmit={this.handleSubmit}
+                />
+                <div className={styles.tasksWrapper}>
                     {!tasks.length && <div>Tasks is Empty</div>}
                     {Tasks}
                 </div>

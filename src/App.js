@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-// import ToDo from './Components/ToDo/ToDo';
-import A from './test/A';
+import ToDo from './Components/ToDo/ToDo';
+// import A from './test/A';
+import image from './assets/images/person.jfif';
 
 class App extends Component {
   state = {
@@ -17,8 +18,9 @@ class App extends Component {
     return (
 
       <div className="App">
-        {/* <ToDo /> */}
-        <A />
+        <img src={image}  alt="Person"/>
+        <ToDo />
+        {/* <A /> */}
       </div>
     )
   }
