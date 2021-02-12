@@ -9,8 +9,7 @@ class AddTask extends React.Component {
         const { value } = event.target;
         this.setState({
             inputValue: value
-        })
-
+        });
     }
     render() {
 

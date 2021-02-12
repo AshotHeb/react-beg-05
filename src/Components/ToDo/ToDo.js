@@ -2,6 +2,7 @@ import React from 'react';
 import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
 import styles from './todo.module.css';
+import idGenerator from '../../helpers/idGenerator';
 
 class ToDo extends React.Component {
     state = {
@@ -22,7 +23,7 @@ class ToDo extends React.Component {
             return (
                 <Task
                     task={task}
-                    key={index}
+                    key={idGenerator()}
                     active={index === 1}
                     active2 = {index === 2}
                 />
