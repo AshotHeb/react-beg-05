@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ToDo from './Components/ToDo/ToDo';
-// import A from './test/A';
-// import image from './assets/images/person.jfif';
-// import Grid from './test/Grid/Grid';
+
 
 class App extends Component {
   state = {
@@ -19,10 +17,7 @@ class App extends Component {
     return (
 
       <div className="App">
-        {/* <Grid /> */}
-        {/* <img src={image} alt="Person" /> */}
-        <ToDo test={true}/>
-        {/* <A /> */}
+        <ToDo test={true} />
       </div>
     )
   }

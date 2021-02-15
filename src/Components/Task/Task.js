@@ -1,20 +1,28 @@
-import React from 'react';
-import styles from './task.module.css';
-const Task = ({ task, active  ,active2}) => {
-    const cls = [styles.task];
-    if (active){
-        cls.push(styles.first);
-        cls.push(styles.third);
-    }
-    if(active2) 
-        cls.push(styles.second)
 
+// import styles from './task.module.css';
+import { Card, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+
+const Task = ({ task, handleDeleteOneTask }) => {    
     return (
-        <div className={cls.join(' ')}>
-            <p>
-                {task}
-            </p>
-        </div>
+        <Card style={{ width: '18rem' }}>
+            <Card.Body>
+                <Card.Title>Title : {task.text.slice(0, 10)}</Card.Title>
+                <Card.Text> Description : {task.text}</Card.Text>
+                <Button
+                    variant="danger"
+                    onClick={() => handleDeleteOneTask(task._id)}
+                >
+                    <FontAwesomeIcon icon={faTrash} />
+                </Button>
+                <Button variant="warning" className="ml-3">
+                    <FontAwesomeIcon icon={faEdit} />
+                </Button>
+            </Card.Body>
+        </Card>
+
+
     )
 }
 
