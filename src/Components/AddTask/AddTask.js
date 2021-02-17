@@ -24,7 +24,7 @@ class AddTask extends React.Component {
     }
     render() {
         const { inputValue } = this.state;
-
+        const { disabled } = this.props;
 
 
         return (
@@ -36,6 +36,7 @@ class AddTask extends React.Component {
                     onKeyPress={this.handleS}
                     value={inputValue}
                     style={{ width: "70%" }}
+                    disabled={disabled}
 
                 />
                 <Button

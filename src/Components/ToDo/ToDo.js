@@ -3,7 +3,7 @@ import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
 // import styles from './todo.module.css';
 import idGenerator from '../../helpers/idGenerator';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 class ToDo extends React.Component {
     state = {
@@ -32,6 +32,7 @@ class ToDo extends React.Component {
             },
 
         ],
+        removeTasks: [],
     }
     handleSubmit = (value) => {
         if (!value) return;
@@ -49,7 +50,7 @@ class ToDo extends React.Component {
         let tasks = [...this.state.tasks];
         tasks = tasks.filter(item => item._id !== id);
 
-        
+
         // const idx = tasks.findIndex(item => item._id === id);
         // tasks.splice(idx ,1);
 
@@ -60,8 +61,32 @@ class ToDo extends React.Component {
 
 
     }
+    toggleSetRemoveTaskIds = (_id) => {
+        //copy Set
+        //const  removeTasks = new Set(removeTasks);
+        let removeTasks = [...this.state.removeTasks];
+        if (removeTasks.includes(_id)) {
+            removeTasks = removeTasks.filter(id => id !== _id);
+        } else {
+            removeTasks.push(_id);
+        }
+
+        this.setState({
+            removeTasks
+        });
+    }
+    removeSelectedTasks = () => {
+        let tasks = [...this.state.tasks];
+        const removeTasks = [...this.state.removeTasks];
+        tasks = tasks.filter(item => !removeTasks.includes(item._id));
+        this.setState({
+            tasks,
+            removeTasks:[] //new Set()
+        });
+
+    }
     render() {
-        const { tasks } = this.state;
+        const { tasks ,removeTasks } = this.state;
         const Tasks = this.state.tasks.map(task => {
             return (
                 <Col
@@ -74,6 +99,8 @@ class ToDo extends React.Component {
                     <Task
                         task={task}
                         handleDeleteOneTask={this.handleDeleteOneTask}
+                        toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
+                        disabled={!!removeTasks.length}
                     />
                 </Col>
             )
@@ -87,12 +114,24 @@ class ToDo extends React.Component {
                             <h1>ToDo Component</h1>
                             <AddTask
                                 handleSubmit={this.handleSubmit}
+                                disabled={!!removeTasks.length}
                             />
                         </Col>
                     </Row>
                     <Row className="mt-4">
                         {!tasks.length && <div>Tasks is Empty</div>}
                         {Tasks}
+                    </Row>
+                    <Row className="mt-5">
+                        <Col>
+                            <Button
+                                variant="danger"
+                                onClick={this.removeSelectedTasks}
+                                disabled={!!!removeTasks.length}
+                            >
+                                Remove Selected
+                            </Button>
+                        </Col>
                     </Row>
                 </Container>
             </div>

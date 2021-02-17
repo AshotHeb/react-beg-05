@@ -16,3 +16,8 @@
 .third {
     transform:scale(1.2);
 }
+.card {
+    background-color: rgba(169, 146, 192,.8);
+    color:white;
+    width: 18rem;
+}
