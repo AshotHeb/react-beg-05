@@ -32,7 +32,7 @@ class ToDo extends React.Component {
             },
 
         ],
-        removeTasks: [],
+        removeTasks: new Set()
     }
     handleSubmit = (value) => {
         if (!value) return;
@@ -44,31 +44,22 @@ class ToDo extends React.Component {
         this.setState({
             tasks
         });
+
     }
 
     handleDeleteOneTask = (id) => {
         let tasks = [...this.state.tasks];
         tasks = tasks.filter(item => item._id !== id);
-
-
-        // const idx = tasks.findIndex(item => item._id === id);
-        // tasks.splice(idx ,1);
-
         this.setState({
             tasks
         });
-
-
-
     }
     toggleSetRemoveTaskIds = (_id) => {
-        //copy Set
-        //const  removeTasks = new Set(removeTasks);
-        let removeTasks = [...this.state.removeTasks];
-        if (removeTasks.includes(_id)) {
-            removeTasks = removeTasks.filter(id => id !== _id);
+        let removeTasks = new Set(this.state.removeTasks);
+        if (removeTasks.has(_id)) {
+            removeTasks.delete(_id);
         } else {
-            removeTasks.push(_id);
+            removeTasks.add(_id);
         }
 
         this.setState({
@@ -77,16 +68,16 @@ class ToDo extends React.Component {
     }
     removeSelectedTasks = () => {
         let tasks = [...this.state.tasks];
-        const removeTasks = [...this.state.removeTasks];
-        tasks = tasks.filter(item => !removeTasks.includes(item._id));
+        const { removeTasks } = this.state;
+        tasks = tasks.filter(item => !removeTasks.has(item._id));
         this.setState({
             tasks,
-            removeTasks:[] //new Set()
+            removeTasks: new Set()
         });
 
     }
     render() {
-        const { tasks ,removeTasks } = this.state;
+        const { tasks, removeTasks } = this.state;
         const Tasks = this.state.tasks.map(task => {
             return (
                 <Col
@@ -100,11 +91,12 @@ class ToDo extends React.Component {
                         task={task}
                         handleDeleteOneTask={this.handleDeleteOneTask}
                         toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
-                        disabled={!!removeTasks.length}
+                        disabled={!!removeTasks.size}
+                        checked={removeTasks.has(task._id)}
                     />
                 </Col>
             )
-        })
+        });
 
         return (
             <div>
@@ -114,7 +106,7 @@ class ToDo extends React.Component {
                             <h1>ToDo Component</h1>
                             <AddTask
                                 handleSubmit={this.handleSubmit}
-                                disabled={!!removeTasks.length}
+                                disabled={!!removeTasks.size}
                             />
                         </Col>
                     </Row>
@@ -127,7 +119,7 @@ class ToDo extends React.Component {
                             <Button
                                 variant="danger"
                                 onClick={this.removeSelectedTasks}
-                                disabled={!!!removeTasks.length}
+                                disabled={!!!removeTasks.size}
                             >
                                 Remove Selected
                             </Button>

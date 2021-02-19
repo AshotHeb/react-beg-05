@@ -21,3 +21,6 @@
     color:white;
     width: 18rem;
 }
+.checked {
+    opacity: .5;
+}
