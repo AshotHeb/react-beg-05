@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Task from '../Task/Task';
 import AddTask from '../AddTask/AddTask';
 // import styles from './todo.module.css';
@@ -32,7 +32,8 @@ class ToDo extends React.Component {
             },
 
         ],
-        removeTasks: new Set()
+        removeTasks: new Set(),
+        isAllChecked: false
     }
     handleSubmit = (value) => {
         if (!value) return;
@@ -72,12 +73,27 @@ class ToDo extends React.Component {
         tasks = tasks.filter(item => !removeTasks.has(item._id));
         this.setState({
             tasks,
-            removeTasks: new Set()
+            removeTasks: new Set(),
+            isAllChecked: false
         });
 
     }
+    handleToggleCheckAll = () => {
+        const { tasks, isAllChecked } = this.state;
+        let removeTasks = new Set();
+        if (!isAllChecked) {
+            removeTasks = new Set(this.state.removeTasks);
+            tasks.forEach(task => {
+                removeTasks.add(task._id);
+            });
+        };
+        this.setState({
+            removeTasks,
+            isAllChecked: !isAllChecked
+        });
+    }
     render() {
-        const { tasks, removeTasks } = this.state;
+        const { tasks, removeTasks, isAllChecked } = this.state;
         const Tasks = this.state.tasks.map(task => {
             return (
                 <Col
@@ -99,36 +115,50 @@ class ToDo extends React.Component {
         });
 
         return (
-            <div>
-                <Container>
-                    <Row className="mt-4">
-                        <Col>
-                            <h1>ToDo Component</h1>
-                            <AddTask
-                                handleSubmit={this.handleSubmit}
-                                disabled={!!removeTasks.size}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className="mt-4">
-                        {!tasks.length && <div>Tasks is Empty</div>}
-                        {Tasks}
-                    </Row>
-                    <Row className="mt-5">
-                        <Col>
-                            <Button
-                                variant="danger"
-                                onClick={this.removeSelectedTasks}
-                                disabled={!!!removeTasks.size}
-                            >
-                                Remove Selected
+            <>
+                <div>
+                    <Container>
+                        <Row className="mt-4">
+                            <Col>
+                                <h1>ToDo Component</h1>
+                                <AddTask
+                                    handleSubmit={this.handleSubmit}
+                                    disabled={!!removeTasks.size}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="mt-4">
+                            {!tasks.length && <div>Tasks is Empty</div>}
+                            {Tasks}
+                        </Row>
+                        <Row className="mt-5">
+                            <Col>
+                                <Button
+                                    variant="danger"
+                                    onClick={this.removeSelectedTasks}
+                                    disabled={!!!removeTasks.size}
+                                >
+                                    Remove Selected
                             </Button>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
+                                <Button
+                                    variant="primary"
+                                    className="ml-5"
+                                    onClick={this.handleToggleCheckAll}
+                                    disabled={!!!tasks.length}
+                                >
+                                    {isAllChecked ? 'Remove All Selected' : 'Select All'}
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+                <div>
+                    <h1>Haram Div</h1>
+                </div>
+            </>
         )
     }
 }
 
 export default ToDo;
+
