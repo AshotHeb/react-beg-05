@@ -1,10 +1,16 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 class AddTask extends React.Component {
-    state = {
-        inputValue: ''
+    constructor(props) {
+        super(props);
+        this.inputRef = React.createRef()
+        this.state = {
+            inputValue: ''
+        }
     }
+
     handleChange = (event) => {
         const { value } = event.target;
         this.setState({
@@ -12,8 +18,8 @@ class AddTask extends React.Component {
         });
     }
     handleS = ({ key, type }) => {
+      
         if (type === 'keypress' && key !== 'Enter') return;
-
         const { inputValue } = this.state;
         const { handleSubmit } = this.props;
 
@@ -22,7 +28,11 @@ class AddTask extends React.Component {
             inputValue: ''
         });
     }
+    componentDidMount() {
+        this.inputRef.current.focus();
+    }
     render() {
+     
         const { inputValue } = this.state;
         const { disabled } = this.props;
 
@@ -37,7 +47,7 @@ class AddTask extends React.Component {
                     value={inputValue}
                     style={{ width: "70%" }}
                     disabled={disabled}
-
+                    ref={this.inputRef}
                 />
                 <Button
                     variant="primary"
@@ -51,4 +61,8 @@ class AddTask extends React.Component {
     }
 }
 
+AddTask.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired
+}
 export default AddTask;

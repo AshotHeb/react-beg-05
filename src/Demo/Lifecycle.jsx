@@ -1,4 +1,5 @@
 import React from 'react';
+import withTest from '../hoc/withTest';
 
 class LifeCycle extends React.Component {
     constructor(props) {
@@ -56,5 +57,5 @@ class LifeCycle extends React.Component {
 
 };
 
-export default LifeCycle;
+export default withTest(LifeCycle);
 

@@ -4,6 +4,8 @@ import AddTask from '../AddTask/AddTask';
 // import styles from './todo.module.css';
 import idGenerator from '../../helpers/idGenerator';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+// import withTest from '../../hoc/withTest';
+import withScreenSizes from '../../hoc/withScreenSizes';
 
 class ToDo extends React.Component {
     state = {
@@ -108,12 +110,11 @@ class ToDo extends React.Component {
                         handleDeleteOneTask={this.handleDeleteOneTask}
                         toggleSetRemoveTaskIds={this.toggleSetRemoveTaskIds}
                         disabled={!!removeTasks.size}
-                        checked={removeTasks.has(task._id)}
+                        checked={removeTasks.has(task._id)}          
                     />
                 </Col>
             )
         });
-
         return (
             <>
                 <div>
@@ -160,5 +161,5 @@ class ToDo extends React.Component {
     }
 }
 
-export default ToDo;
+export default withScreenSizes(ToDo);
 
