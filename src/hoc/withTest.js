@@ -6,7 +6,10 @@ const withTest = (Component) => {
             test: true
         }
         render() {
-            return <Component test={this.state.test}/>;
+            return <Component
+                {...this.props}
+                test={this.state.test}
+            />;
         }
     }
 };
