@@ -1,8 +1,8 @@
 import React from 'react';
 import Task from '../Task/Task';
-import AddTask from '../AddTask/AddTask';
 import Confirm from '../Confirm/Confirm';
 import EditTaskModal from '../EditTaskModal/EditTaskModal';
+import AddTaskModal from '../AddTaskModal/AddTaskModal';
 // import styles from './todo.module.css';
 import idGenerator from '../../helpers/idGenerator';
 import { Container, Row, Col, Button } from 'react-bootstrap';
@@ -39,7 +39,8 @@ class ToDo extends React.Component {
         removeTasks: new Set(),
         isAllChecked: false,
         isConfirmModal: false,
-        editableTask: null
+        editableTask: null,
+        isOpenAddTaskModal: false
     }
     handleSubmit = (formData) => {
         if (!formData.title || !formData.description) return;
@@ -122,6 +123,14 @@ class ToDo extends React.Component {
             tasks
         });
     }
+    toggleOpenAddTaskModal = () => {
+        this.setState({
+            isOpenAddTaskModal: !this.state.isOpenAddTaskModal
+        });
+    }
+    // componentDidUpdate(prevProps,prevState) {
+    //     console.log('prevState' , prevState);
+    // }
     render() {
 
 
@@ -130,7 +139,8 @@ class ToDo extends React.Component {
             removeTasks,
             isAllChecked,
             isConfirmModal,
-            editableTask
+            editableTask,
+            isOpenAddTaskModal
         } = this.state;
         const Tasks = this.state.tasks.map(task => {
             return (
@@ -158,11 +168,12 @@ class ToDo extends React.Component {
                     <Container>
                         <Row className="mt-4">
                             <Col>
-                                <h1>ToDo Component</h1>
-                                <AddTask
-                                    handleSubmit={this.handleSubmit}
-                                    disabled={!!removeTasks.size}
-                                />
+                                <Button
+                                    varinat="primary"
+                                    onClick={this.toggleOpenAddTaskModal}
+                                >
+                                    Add Task
+                                    </Button>
                             </Col>
                         </Row>
                         <Row className="mt-4">
@@ -201,6 +212,12 @@ class ToDo extends React.Component {
                             editableTask={editableTask}
                             onHide={this.setEditableTaskNull}
                             onSubmit={this.handleEditTask}
+                        />
+                    }
+                    {
+                        isOpenAddTaskModal && <AddTaskModal
+                            onHide={this.toggleOpenAddTaskModal}
+                            handleSubmit={this.handleSubmit}
                         />
                     }
                 </div>
