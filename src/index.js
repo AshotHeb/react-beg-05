@@ -5,11 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './jsTests/async';
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <div>Demo </div>
+    {/* <App /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

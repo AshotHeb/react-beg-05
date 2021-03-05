@@ -13,7 +13,7 @@ const Task = ({
     checked,
     handleSetEditTask
 }) => {
-    
+
     return (
         <Card className={`${styles.card} ${checked && styles.checked}`}>
             <Card.Body className="cardBody">
