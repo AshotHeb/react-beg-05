@@ -1,41 +1,16 @@
 import React from 'react';
 import Task from '../Task/Task';
 import Confirm from '../Confirm/Confirm';
-import EditTaskModal from '../EditTaskModal/EditTaskModal';
-import AddTaskModal from '../AddTaskModal/AddTaskModal';
+// import EditTaskModal from '../EditTaskModal/EditTaskModal';
+import TaskActionsModal from '../TaskActionsModal/TaskActionsModal';
 // import styles from './todo.module.css';
-import idGenerator from '../../helpers/idGenerator';
+// import idGenerator from '../../helpers/idGenerator';
+import dateFormmatter from '../../helpers/date';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 class ToDo extends React.Component {
     state = {
-        tasks: [
-            {
-                _id: idGenerator(),
-                title: "AngularJS",
-                description: `JavaScript-фреймворк с открытым исходным кодом.
-                Предназначен для разработки одностраничных приложений. 
-               Его цель — расширение браузерных приложений на основе MVC-шаблона,
-                а также упрощение тестирования и разработки
-                `
-            },
-            {
-                _id: idGenerator(),
-                title: "React Js",
-                description: `JavaScript-библиотека с открытым исходным кодом для разработки пользовательских интерфейсов. 
-                React разрабатывается и поддерживается Facebook, Instagram и сообществом отдельных разработчиков и корпораций.
-                 React может использоваться для разработки одностраничных и мобильных приложений
-                 `
-            },
-            {
-                _id: idGenerator(),
-                title: "Vue.js",
-                description: `JavaScript-фреймворк с открытым исходным кодом для создания пользовательских интерфейсов.
-                Легко интегрируется в проекты с использованием других JavaScript-библиотек. 
-               Может функционировать как веб-фреймворк для разработки одностраничных приложений в реактивном стиле`
-            }
-
-        ],
+        tasks: [],
         removeTasks: new Set(),
         isAllChecked: false,
         isConfirmModal: false,
@@ -44,15 +19,30 @@ class ToDo extends React.Component {
     }
     handleSubmit = (formData) => {
         if (!formData.title || !formData.description) return;
+        formData.date = dateFormmatter(formData.date);
         const tasks = [...this.state.tasks];
-        tasks.push({
-            _id: idGenerator(),
-            title: formData.title,
-            description: formData.description
-        });
-        this.setState({
-            tasks
-        });
+        fetch("http://localhost:3001/task", {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error;
+                }
+                tasks.push(data);
+                this.setState({
+                    tasks
+                });
+            })
+            .catch(error => {
+                console.log("catch Error", error);
+            });
+
+
 
     }
 
@@ -76,14 +66,28 @@ class ToDo extends React.Component {
         });
     }
     removeSelectedTasks = () => {
-        let tasks = [...this.state.tasks];
-        const { removeTasks } = this.state;
-        tasks = tasks.filter(item => !removeTasks.has(item._id));
-        this.setState({
-            tasks,
-            removeTasks: new Set(),
-            isAllChecked: false
-        });
+        fetch("http://localhost:3001/task", {
+            method: "PATCH",
+            body: JSON.stringify({ tasks: Array.from(this.state.removeTasks) }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error;
+                }
+                let tasks = [...this.state.tasks];
+                const { removeTasks } = this.state;
+                tasks = tasks.filter(item => !removeTasks.has(item._id));
+                this.setState({
+                    tasks,
+                    removeTasks: new Set(),
+                    isAllChecked: false
+                });
+            })
+
 
     }
     handleToggleCheckAll = () => {
@@ -128,9 +132,22 @@ class ToDo extends React.Component {
             isOpenAddTaskModal: !this.state.isOpenAddTaskModal
         });
     }
-    // componentDidUpdate(prevProps,prevState) {
-    //     console.log('prevState' , prevState);
-    // }
+    componentDidMount() {
+        fetch("http://localhost:3001/task")
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error;
+                }
+                this.setState({
+                    tasks: data
+                });
+            })
+            .catch(error => {
+                console.error("Get Tasks Request Error", error);
+
+            });
+    }
     render() {
 
 
@@ -208,22 +225,25 @@ class ToDo extends React.Component {
                         />
                     }
                     {
-                        editableTask && <EditTaskModal
+                        editableTask && <TaskActionsModal
                             editableTask={editableTask}
                             onHide={this.setEditableTaskNull}
                             onSubmit={this.handleEditTask}
                         />
                     }
                     {
-                        isOpenAddTaskModal && <AddTaskModal
+                        isOpenAddTaskModal && <TaskActionsModal
+                            // onHide={this.toggleOpenAddTaskModal}
+                            // handleSubmit={this.handleSubmit}
                             onHide={this.toggleOpenAddTaskModal}
-                            handleSubmit={this.handleSubmit}
+                            onSubmit={this.handleSubmit}
                         />
                     }
                 </div>
             </>
         )
     }
+
 }
 
 export default ToDo;
