@@ -1,11 +1,8 @@
 import React from 'react';
-import Task from '../Task/Task';
-import Confirm from '../Confirm/Confirm';
-// import EditTaskModal from '../EditTaskModal/EditTaskModal';
-import TaskActionsModal from '../TaskActionsModal/TaskActionsModal';
-// import styles from './todo.module.css';
-// import idGenerator from '../../helpers/idGenerator';
-import dateFormmatter from '../../helpers/date';
+import Task from '../../Task/Task';
+import Confirm from '../../Confirm/Confirm';
+import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
+import dateFormmatter from '../../../helpers/date';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 class ToDo extends React.Component {
@@ -46,12 +43,26 @@ class ToDo extends React.Component {
 
     }
 
-    handleDeleteOneTask = (id) => {
-        let tasks = [...this.state.tasks];
-        tasks = tasks.filter(item => item._id !== id);
-        this.setState({
-            tasks
-        });
+    handleDeleteOneTask = (_id) => {
+
+        fetch("http://localhost:3001/task/" + _id, {
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error
+                }
+                let tasks = [...this.state.tasks];
+                tasks = tasks.filter(item => item._id !== _id);
+                this.setState({
+                    tasks
+                });
+            })
+            .catch(error => {
+                console.error("Delete Task Request Error", error);
+            });
+
     }
     toggleSetRemoveTaskIds = (_id) => {
         let removeTasks = new Set(this.state.removeTasks);
@@ -120,12 +131,29 @@ class ToDo extends React.Component {
         });
     }
     handleEditTask = (editTask) => {
-        const tasks = [...this.state.tasks];
-        const idx = tasks.findIndex(task => task._id === editTask._id);
-        tasks[idx] = editTask;
-        this.setState({
-            tasks
-        });
+        fetch("http://localhost:3001/task/" + editTask._id, {
+            method: "PUT",
+            body: JSON.stringify(editTask),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    throw data.error;
+                }
+                const tasks = [...this.state.tasks];
+                const idx = tasks.findIndex(task => task._id === data._id);
+                tasks[idx] = data;
+                this.setState({
+                    tasks
+                });
+            })
+            .catch(error => {
+                console.error("Edit Task Request", error);
+            })
+
     }
     toggleOpenAddTaskModal = () => {
         this.setState({

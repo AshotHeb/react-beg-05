@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
+import dateFormatter from '../../helpers/date';
 
 class TaskActionsModal extends React.Component {
     constructor(props) {
@@ -11,9 +12,7 @@ class TaskActionsModal extends React.Component {
             title: '',
             description: '',
             ...props.editableTask,
-            date:props.editableTask?new Date(props.editableTask.date):new Date()
-        
-    
+            date: props.editableTask ? new Date(props.editableTask.date) : new Date()
         }
     }
 
@@ -24,18 +23,15 @@ class TaskActionsModal extends React.Component {
         });
     }
     handleS = ({ key, type }) => {
-        const { title, description, date } = this.state;
+        const { title, description } = this.state;
         const { onSubmit, onHide } = this.props;
         if (
             (type === 'keypress' && key !== 'Enter') ||
             (!title || !description)
         ) return;
 
-        const formData = {
-            title,
-            description,
-            date
-        };
+        const formData = { ...this.state };
+        formData.date = dateFormatter(formData.date);
         onSubmit(formData);
         onHide();
 
@@ -99,8 +95,8 @@ class TaskActionsModal extends React.Component {
                         variant="primary"
                         disabled={!!!title || !!!description}
                     >
-                        Add
-                        </Button>
+                        {this.props.editableTask ? "Save" : "Add"}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         );
