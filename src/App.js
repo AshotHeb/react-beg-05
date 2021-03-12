@@ -6,6 +6,8 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import ToDo from './Components/pages/ToDo/ToDo';
 import Contact from './Components/pages/Contact/Contact';
 import About from './Components/pages/About/About';
+import NotFound from './Components/pages/NotFound/NotFound';
+import SingleTask from './Components/pages/SingleTask/SingleTask';
 
 
 class App extends Component {
@@ -16,35 +18,12 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <Switch>
-
           <Route path="/" component={ToDo} exact />
           <Route path="/contact" component={Contact} exact />
           <Route path="/about" component={About} exact />
-          <Redirect to="/" />
-
-
-          {/* 
-            example 2 
-
-            <Route path="/" exact>
-              <ToDo />
-            </Route>
-            <Route path="/contact" exact>
-              <Contact />
-            </Route>
-            <Route path="/about" exact>
-              <About />
-            </Route>
-             */}
-
-          {/* 
-
-          example 3
-          <Route path="/" render={() => <ToDo />} exact />
-          <Route path="/contact" render={() => <Contact />} exact />
-          <Route path="/about" render={() => <About />} exact /> 
-          */}
-
+          <Route path="/task/:id" component={SingleTask} exact />
+          <Route path="/404" component={NotFound} exact />
+          <Redirect to="/404" />
         </Switch>
 
       </div>
