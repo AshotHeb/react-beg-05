@@ -13,9 +13,9 @@ const Task = ({
     handleDeleteOneTask,
     toggleSetRemoveTaskIds,
     checked,
-    handleSetEditTask
+    handleSetEditTask,
 }) => {
-
+  
     return (
         <Card className={`${styles.card} ${checked && styles.checked}`}>
             <Card.Body className="cardBody">

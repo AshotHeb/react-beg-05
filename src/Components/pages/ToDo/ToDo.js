@@ -2,6 +2,7 @@ import React from 'react';
 import Task from '../../Task/Task';
 import Confirm from '../../Confirm/Confirm';
 import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
+import Preloader from '../../Preloader/Preloader';
 import dateFormmatter from '../../../helpers/date';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
@@ -12,7 +13,8 @@ class ToDo extends React.Component {
         isAllChecked: false,
         isConfirmModal: false,
         editableTask: null,
-        isOpenAddTaskModal: false
+        isOpenAddTaskModal: false,
+        loading: false
     }
     handleSubmit = (formData) => {
         if (!formData.title || !formData.description) return;
@@ -161,6 +163,9 @@ class ToDo extends React.Component {
         });
     }
     componentDidMount() {
+        this.setState({
+            loading: true
+        })
         fetch("http://localhost:3001/task")
             .then(res => res.json())
             .then(data => {
@@ -168,12 +173,17 @@ class ToDo extends React.Component {
                     throw data.error;
                 }
                 this.setState({
-                    tasks: data
+                    tasks: data,
                 });
             })
             .catch(error => {
                 console.error("Get Tasks Request Error", error);
 
+            })
+            .finally(() => {
+                this.setState({
+                    loading: false
+                });
             });
     }
     render() {
@@ -185,8 +195,14 @@ class ToDo extends React.Component {
             isAllChecked,
             isConfirmModal,
             editableTask,
-            isOpenAddTaskModal
+            isOpenAddTaskModal,
+            loading
         } = this.state;
+
+        if (loading)
+            return <Preloader />;
+
+
         const Tasks = this.state.tasks.map(task => {
             return (
                 <Col
@@ -207,6 +223,7 @@ class ToDo extends React.Component {
                 </Col>
             )
         });
+
         return (
             <>
                 <div>
@@ -261,8 +278,6 @@ class ToDo extends React.Component {
                     }
                     {
                         isOpenAddTaskModal && <TaskActionsModal
-                            // onHide={this.toggleOpenAddTaskModal}
-                            // handleSubmit={this.handleSubmit}
                             onHide={this.toggleOpenAddTaskModal}
                             onSubmit={this.handleSubmit}
                         />
