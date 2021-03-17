@@ -19,6 +19,7 @@ class ToDo extends React.Component {
     handleSubmit = (formData) => {
         if (!formData.title || !formData.description) return;
         formData.date = dateFormmatter(formData.date);
+        this.setState({ loading: true }); //Loading Started
         const tasks = [...this.state.tasks];
         fetch("http://localhost:3001/task", {
             method: "POST",
@@ -33,20 +34,22 @@ class ToDo extends React.Component {
                     throw data.error;
                 }
                 tasks.push(data);
+                this.state.isOpenAddTaskModal && this.toggleOpenAddTaskModal();
                 this.setState({
                     tasks
                 });
             })
             .catch(error => {
                 console.log("catch Error", error);
+            })
+            .finally(() => {
+                this.setState({ loading: false }); //Loading Ended 
             });
-
-
 
     }
 
     handleDeleteOneTask = (_id) => {
-
+        this.setState({ loading: true }); //Loading Started
         fetch("http://localhost:3001/task/" + _id, {
             method: "DELETE"
         })
@@ -63,6 +66,9 @@ class ToDo extends React.Component {
             })
             .catch(error => {
                 console.error("Delete Task Request Error", error);
+            })
+            .finally(() => {
+                this.setState({ loading: false }); //Loading Ended
             });
 
     }
@@ -79,6 +85,7 @@ class ToDo extends React.Component {
         });
     }
     removeSelectedTasks = () => {
+        this.setState({ loading: true }); //Loading Started
         fetch("http://localhost:3001/task", {
             method: "PATCH",
             body: JSON.stringify({ tasks: Array.from(this.state.removeTasks) }),
@@ -100,6 +107,12 @@ class ToDo extends React.Component {
                     isAllChecked: false
                 });
             })
+            .catch(error => {
+                console.error("Delete Any Tasks Request Error", error);
+            })
+            .finally(() => {
+                this.setState({ loading: false }); //Loading Ended
+            });
 
 
     }
@@ -133,6 +146,7 @@ class ToDo extends React.Component {
         });
     }
     handleEditTask = (editTask) => {
+        this.setState({ loading: true }) //Loading Started
         fetch("http://localhost:3001/task/" + editTask._id, {
             method: "PUT",
             body: JSON.stringify(editTask),
@@ -148,6 +162,7 @@ class ToDo extends React.Component {
                 const tasks = [...this.state.tasks];
                 const idx = tasks.findIndex(task => task._id === data._id);
                 tasks[idx] = data;
+                this.state.editableTask && this.handleSetEditTask();
                 this.setState({
                     tasks
                 });
@@ -155,6 +170,9 @@ class ToDo extends React.Component {
             .catch(error => {
                 console.error("Edit Task Request", error);
             })
+            .finally(() => {
+                this.setState({ loading: false }) //Loading Ended
+            });
 
     }
     toggleOpenAddTaskModal = () => {
@@ -199,8 +217,7 @@ class ToDo extends React.Component {
             loading
         } = this.state;
 
-        if (loading)
-            return <Preloader />;
+
 
 
         const Tasks = this.state.tasks.map(task => {
@@ -281,6 +298,9 @@ class ToDo extends React.Component {
                             onHide={this.toggleOpenAddTaskModal}
                             onSubmit={this.handleSubmit}
                         />
+                    }
+                    {
+                        loading && <Preloader />
                     }
                 </div>
             </>

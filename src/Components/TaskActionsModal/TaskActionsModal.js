@@ -12,7 +12,7 @@ class TaskActionsModal extends React.Component {
             title: '',
             description: '',
             ...props.editableTask,
-            date: props.editableTask ? new Date(props.editableTask.date) : new Date()
+            date: props.editableTask ? new Date(props.editableTask.date) : new Date(),
         }
     }
 
@@ -33,7 +33,7 @@ class TaskActionsModal extends React.Component {
         const formData = { ...this.state };
         formData.date = dateFormatter(formData.date);
         onSubmit(formData);
-        onHide();
+        // onHide();
 
     }
     handleSetDate = (date) => {

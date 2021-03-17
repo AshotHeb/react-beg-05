@@ -3,11 +3,13 @@ import styles from './singleTask.module.css';
 import dateFormatter from '../../../helpers/date';
 import { Button } from 'react-bootstrap';
 import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
+import Preloader from '../../Preloader/Preloader';
 
 class SingleTask extends React.Component {
     state = {
         singleTask: null,
-        isEditModal: false
+        isEditModal: false,
+        loading: false
     }
     toggleEditModal = () => {
         this.setState({
@@ -15,6 +17,7 @@ class SingleTask extends React.Component {
         });
     }
     handleEditTask = (formData) => {
+        this.setState({ loading: true }); //Loading Started
         fetch("http://localhost:3001/task/" + formData._id, {
             method: "PUT",
             body: JSON.stringify(formData),
@@ -27,12 +30,16 @@ class SingleTask extends React.Component {
                 if (data.error)
                     throw data.error
                 this.setState({
-                    singleTask: data
+                    singleTask: data,
+                    isEditModal: false,
                 });
             })
             .catch(error => {
                 console.log("Single Task Page,Edit Task Error", error);
-            });
+            })
+            .finally(() => {
+                this.setState({ loading: false }); //Loading Ended
+            })
     }
     handleDeleteTask = (id) => {
         fetch(`http://localhost:3001/task/${id}`, {
@@ -53,6 +60,7 @@ class SingleTask extends React.Component {
 
     componentDidMount() {
         const { id } = this.props.match.params;
+        this.setState({ loading: true }); //Loading Started
         fetch(`http://localhost:3001/task/${id}`)
             .then(res => res.json())
             .then(data => {
@@ -63,26 +71,29 @@ class SingleTask extends React.Component {
                 });
             })
             .catch(error => {
+                const { history } = this.props;
+                history.push("/404");
                 console.error("Get Single Task Request Error", error);
+            })
+            .finally(() => {
+                this.setState({ loading: false }); //Loading Ended
             });
     }
 
     render() {
-        const { singleTask, isEditModal } = this.state;
-        if (!singleTask) {
-            return <div>
-                <span>Loading...</span>
-            </div>
-        }
+        const {
+            singleTask,
+            isEditModal,
+            loading
+        } = this.state;
+
+
+        if (!singleTask) return <Preloader />
 
         return (
             <>
                 <div className={styles.singeTask}>
-                    <div>
-                        <button onClick={() => this.props.history.goBack()}>
-                            Go Back
-                        </button>
-                    </div>
+
                     <div className={styles.task}>
                         <h2>{singleTask.title}</h2>
                         <p>
@@ -120,6 +131,10 @@ class SingleTask extends React.Component {
                         onSubmit={this.handleEditTask}
                     />
                 }
+                {
+                    loading && <Preloader />
+                }
+
             </>
         );
     }
