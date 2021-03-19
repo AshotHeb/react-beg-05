@@ -181,9 +181,7 @@ class ToDo extends React.Component {
         });
     }
     componentDidMount() {
-        this.setState({
-            loading: true
-        })
+        this.setState({ loading: true });
         fetch("http://localhost:3001/task")
             .then(res => res.json())
             .then(data => {

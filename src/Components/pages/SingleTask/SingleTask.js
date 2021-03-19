@@ -67,7 +67,8 @@ class SingleTask extends React.Component {
                 if (data.error)
                     throw data.error;
                 this.setState({
-                    singleTask: data
+                    singleTask: data,
+                    loading: false //Loading Ended
                 });
             })
             .catch(error => {
@@ -75,9 +76,7 @@ class SingleTask extends React.Component {
                 history.push("/404");
                 console.error("Get Single Task Request Error", error);
             })
-            .finally(() => {
-                this.setState({ loading: false }); //Loading Ended
-            });
+
     }
 
     render() {
