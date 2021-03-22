@@ -6,8 +6,7 @@ import {
     isRequired,
     maxLength,
     minLength,
-    emailValidation,
-    isAllValid
+    emailValidation
 } from '../../helpers/validators';
 
 const inputsInfo = [
@@ -54,7 +53,7 @@ class ContactForm extends React.Component {
                 error: null
             },
             errorMessage: "",
-            isValid: false
+            // isValid: false
         }
 
     }
@@ -112,8 +111,12 @@ class ContactForm extends React.Component {
                 value,
                 valid: !!!error,
                 error
-            },
-            isValid: isAllValid(this.state)
+            }
+
+        }, () => {
+            // this.setState({
+            //     isValid: isAllValid(this.state)
+            // })
         });
 
     }
@@ -121,6 +124,9 @@ class ContactForm extends React.Component {
         this.inputRef.current.focus();
     }
     render() {
+        const { name, email, message, errorMessage } = this.state;
+        const isValid = name.valid && email.valid && message.valid;
+
         const inputs = inputsInfo.map((input, index) => {
             return (
                 <Form.Group
@@ -149,14 +155,14 @@ class ContactForm extends React.Component {
             <div style={{ width: "40%", margin: "0 auto" }}>
                 <Form onSubmit={(e) => e.preventDefault()}>
                     <p style={{ color: "#fb3838", textTransform: "uppercase" }}>
-                        {this.state.errorMessage}
+                        {errorMessage}
                     </p>
                     {inputs}
                     <Button
                         variant="primary"
                         type="submit"
                         onClick={this.handleSubmit}
-                        disabled={!this.state.isValid}
+                        disabled={!isValid}
                     >
                         Submit
             </Button>

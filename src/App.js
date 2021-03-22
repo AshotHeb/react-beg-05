@@ -8,6 +8,8 @@ import Contact from './Components/pages/Contact/Contact';
 import About from './Components/pages/About/About';
 import NotFound from './Components/pages/NotFound/NotFound';
 import SingleTask from './Components/pages/SingleTask/SingleTask';
+import Hooks from './Demo/Hooks';
+import LifeCycle from './Demo/Lifecycle';
 
 
 const pages = [
@@ -35,7 +37,9 @@ const pages = [
 ]
 
 class App extends Component {
-
+  state = {
+    isHooksPage: true
+  }
   render() {
     const pageRoutes = pages.map((page, index) => {
       return <Route
@@ -47,12 +51,13 @@ class App extends Component {
     })
     return (
       <div className="App">
-        <Navbar />
+        {/* <Navbar />
         <Switch>
           {pageRoutes}
           <Redirect to="/404" />
-        </Switch>
-
+        </Switch> */}
+        {this.state.isHooksPage && <Hooks />}
+        {/* <LifeCycle /> */}
       </div>
     )
   }
