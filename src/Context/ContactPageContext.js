@@ -14,6 +14,7 @@ const ContactContextProvider = ({
     history,
     ...props
 }) => {
+   
     const [formData, setFormData] = useState({
         name: {
             value: "",
@@ -32,6 +33,7 @@ const ContactContextProvider = ({
         },
     });
     const [errorMessage, setErrorMessage] = useState("");
+
     const handleSubmit = () => {
         const contactFormData = { ...formData };
         const isValid = contactFormData.name.valid &&

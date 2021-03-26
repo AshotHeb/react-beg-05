@@ -1,4 +1,4 @@
-import React, { createRef, useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import styles from './form.module.css';
 import { withRouter } from 'react-router-dom';
@@ -29,7 +29,14 @@ const inputsInfo = [
 
 ]
 const ContactForm = () => {
+    const nameInputRef = useRef(null);
     const context = useContext(ContactContext);
+
+    useEffect(() => {
+        nameInputRef.current.focus();
+    }, []);
+
+
     const {
         formData,
         errorMessage,
@@ -48,6 +55,7 @@ const ContactForm = () => {
             >
                 <Form.Label>{input.label}</Form.Label>
                 <Form.Control
+                    ref={!!!index ? nameInputRef : null}
                     name={input.name}
                     type={input.type}
                     placeholder={input.label}

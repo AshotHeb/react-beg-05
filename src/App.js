@@ -10,10 +10,11 @@ import NotFound from './Components/pages/NotFound/NotFound';
 import SingleTask from './Components/pages/SingleTask/SingleTask';
 // import Hooks from './Demo/Hooks';
 // import LifeCycle from './Demo/Lifecycle';
-
 //Context
 // import HooksStateProvider from './Context/ContextDemo';
+import UseReducer from './Demo/UseReducer';
 import ContactContextProvider from './Context/ContactPageContext';
+import UseCallback from "./Demo/UseCallback";
 
 const pages = [
   {
@@ -37,6 +38,7 @@ const pages = [
     component: NotFound
   },
 
+
 ]
 
 class App extends Component {
@@ -46,33 +48,41 @@ class App extends Component {
   render() {
     const pageRoutes = pages.map((page, index) => {
       if (page.path === "/contact") {
-        return <ContactContextProvider key={index}>
-          <Route
-            path={page.path}
-            component={page.component}
-            exact
-          />
-        </ContactContextProvider>
+        return <Route
+          path={page.path}
+          exact
+          key={index}
+          render={(props) => {
+            return (
+              <ContactContextProvider>
+                {<page.component {...props} />}
+              </ContactContextProvider>
+            );
+          }}
+        />
       }
+
       return <Route
         key={index}
         path={page.path}
         component={page.component}
         exact
       />
-    })
+    });
+
+
+
     return (
       <div className="App">
-        <Navbar />
+        {/* <Navbar />
         <Switch>
           {pageRoutes}
           <Redirect to="/404" />
-        </Switch>
+        </Switch> */}
 
-        {/* <HooksStateProvider>
-          <Hooks />
-          <LifeCycle />
-        </HooksStateProvider> */}
+        {/* <UseReducer /> */}
+
+        <UseCallback />
       </div>
     )
   }
