@@ -8,13 +8,14 @@ import Contact from './Components/pages/Contact/Contact';
 import About from './Components/pages/About/About';
 import NotFound from './Components/pages/NotFound/NotFound';
 import SingleTask from './Components/pages/SingleTask/SingleTask';
-// import Hooks from './Demo/Hooks';
-// import LifeCycle from './Demo/Lifecycle';
-//Context
-// import HooksStateProvider from './Context/ContextDemo';
-import UseReducer from './Demo/UseReducer';
 import ContactContextProvider from './Context/ContactPageContext';
-import UseCallback from "./Demo/UseCallback";
+
+// import ReduxDemo from './Demo/Redux';
+import ReduxDemo2 from './Demo/Redux2';
+
+
+
+
 
 const pages = [
   {
@@ -80,9 +81,7 @@ class App extends Component {
           <Redirect to="/404" />
         </Switch> */}
 
-        {/* <UseReducer /> */}
-
-        <UseCallback />
+        <ReduxDemo2 />
       </div>
     )
   }

@@ -5,16 +5,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './index.css';
 import App from './App';
+import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';
 import './jsTests/async';
 import { BrowserRouter } from 'react-router-dom';
+import store from './Redux/store';
 //Backend API Link => https://github.com/MASISKAR/react-js-beg-02-todo-api?fbclid=IwAR0QrFLqxrWmlEEolNHjXpG0jceO0zINThwopasrdww4n6AxaDrqA5Y3f4A
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <div>Demo </div> */}
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

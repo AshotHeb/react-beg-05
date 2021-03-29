@@ -17,7 +17,7 @@ class ToDo extends React.Component {
         loading: false
     }
     handleSubmit = (formData) => {
-        if (!formData.title || !formData.description) return;
+        if (!!!formData.title.trim() || !!!formData.description.trim()) return;
         formData.date = dateFormmatter(formData.date);
         this.setState({ loading: true }); //Loading Started
         const tasks = [...this.state.tasks];
@@ -162,7 +162,7 @@ class ToDo extends React.Component {
                 const tasks = [...this.state.tasks];
                 const idx = tasks.findIndex(task => task._id === data._id);
                 tasks[idx] = data;
-                this.state.editableTask && this.handleSetEditTask();
+                this.state.editableTask && this.setEditableTaskNull();
                 this.setState({
                     tasks
                 });
@@ -202,8 +202,8 @@ class ToDo extends React.Component {
                 });
             });
     }
-    componentDidUpdate(prevProps){
-       
+    componentDidUpdate(prevProps) {
+
     }
     render() {
 

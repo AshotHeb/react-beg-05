@@ -24,7 +24,7 @@ class TaskActionsModal extends React.Component {
     }
     handleS = ({ key, type }) => {
         const { title, description } = this.state;
-        const { onSubmit, onHide } = this.props;
+        const { onSubmit } = this.props;
         if (
             (type === 'keypress' && key !== 'Enter') ||
             (!title || !description)
@@ -33,7 +33,7 @@ class TaskActionsModal extends React.Component {
         const formData = { ...this.state };
         formData.date = dateFormatter(formData.date);
         onSubmit(formData);
-        // onHide();
+
 
     }
     handleSetDate = (date) => {
