@@ -89,7 +89,7 @@ class TaskActionsModal extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
 
-                    <Button onClick={onHide} variant="secondary">Close</Button>
+                    <Button onClick={() => onHide()} variant="secondary">Close</Button>
                     <Button
                         onClick={this.handleS}
                         variant="primary"
