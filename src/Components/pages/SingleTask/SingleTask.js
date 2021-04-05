@@ -104,7 +104,7 @@ const SingleTask = (props) => {
             });
 
     }, [props.history]);
-   
+
 
     if (!!!singleTask) return <Preloader />
 

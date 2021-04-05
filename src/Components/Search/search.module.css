@@ -1,0 +1,13 @@
+.searchSection {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding:50px 30px;
+    box-shadow: 0px 3px 15px rgb(168, 148, 148);
+}
+.datePicker {
+    display: flex;
+    justify-content: space-between;
+    width:100%;
+    margin-top: 18px;
+}

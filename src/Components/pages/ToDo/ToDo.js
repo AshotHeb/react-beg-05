@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Task from '../../Task/Task';
+import Search from '../../Search/Search';
 import Confirm from '../../Confirm/Confirm';
 import TaskActionsModal from '../../TaskActionsModal/TaskActionsModal';
 import Preloader from '../../Preloader/Preloader';
@@ -7,12 +8,15 @@ import dateFormmatter from '../../../helpers/date';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import actionTypes from '../../../Redux/actionTypes';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
     setTasksThunk,
     addTaskThunk,
     deleteOneTaskThunk,
     editTaskThunk,
-    removeAnyTasksThunk
+    removeAnyTasksThunk,
+    toggleActiveStatusThunk
 } from '../../../Redux/actions';
 
 const ToDo = (props) => {
@@ -25,6 +29,8 @@ const ToDo = (props) => {
         isOpenAddTaskModal,
         isConfirmModal,
         editableTask,
+        errorMessage,
+        successMessage,
         //functions
         toggleCheckTask,
         toggleCheckAllTasks,
@@ -34,7 +40,8 @@ const ToDo = (props) => {
         deleteOneTask,
         editTask,
         removeAnyTasks,
-        setTasks
+        setTasks,
+        toggleActiveTask
 
     } = props;
     const handleSubmit = (formData) => {
@@ -47,7 +54,29 @@ const ToDo = (props) => {
     useEffect(() => {
         setTasks();
     }, [setTasks]);
+    useEffect(() => {
+        errorMessage && toast.error(`🦄  ${errorMessage}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }, [errorMessage]);
 
+    useEffect(() => {
+        successMessage && toast.success(`🦄  ${successMessage}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }, [successMessage]);
 
     const Tasks = tasks.map(task => {
         return (
@@ -65,15 +94,23 @@ const ToDo = (props) => {
                     disabled={!!removeTasks.size}
                     checked={removeTasks.has(task._id)}
                     handleSetEditTask={setOrRemoveEditableTask}
+                    toggleActiveTask={toggleActiveTask}
                 />
             </Col>
         )
     });
 
+
+
     return (
         <>
             <div>
                 <Container>
+                    <Row>
+                        <Col>
+                            <Search />
+                        </Col>
+                    </Row>
                     <Row className="mt-4">
                         <Col>
                             <Button
@@ -112,7 +149,7 @@ const ToDo = (props) => {
                 {
                     isConfirmModal && <Confirm
                         onHide={toggleOpenConfirmModal}
-                        onSubmit={removeAnyTasks}
+                        onSubmit={() => removeAnyTasks(removeTasks)}
                         message={` Do you wont to delete ${removeTasks.size} task? `}
                     />
                 }
@@ -132,6 +169,9 @@ const ToDo = (props) => {
                 {
                     loading && <Preloader />
                 }
+                {
+                    <ToastContainer />
+                }
             </div>
         </>
     );
@@ -146,7 +186,9 @@ const mapStateToProps = (state) => {
         isOpenAddTaskModal,
         isAllChecked,
         isConfirmModal,
-        editableTask
+        editableTask,
+        errorMessage,
+        successMessage
     } = state.todoState;
     return {
         tasks,
@@ -155,7 +197,9 @@ const mapStateToProps = (state) => {
         isOpenAddTaskModal,
         isAllChecked,
         isConfirmModal,
-        editableTask
+        editableTask,
+        errorMessage,
+        successMessage
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -165,7 +209,8 @@ const mapDispatchToProps = (dispatch) => {
         AddTask: (formData) => dispatch(addTaskThunk(formData)),
         editTask: (editTask) => dispatch(editTaskThunk(editTask)),
         deleteOneTask: (_id) => dispatch(deleteOneTaskThunk(_id)),
-        removeAnyTasks: () => dispatch(removeAnyTasksThunk()),
+        removeAnyTasks: (removeTasks) => dispatch(removeAnyTasksThunk(removeTasks)),
+        toggleActiveTask: (task) => dispatch(toggleActiveStatusThunk(task)),
 
         //Actions
         toggleCheckTask: (_id) => dispatch({ type: actionTypes.TOGGLE_CHECK_TASK, _id }),

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import styles from './task.module.css';
 import { Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faCheckSquare, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import dateFormmatter from '../../helpers/date';
@@ -14,8 +14,9 @@ const Task = ({
     toggleSetRemoveTaskIds,
     checked,
     handleSetEditTask,
+    toggleActiveTask
 }) => {
-  
+
     return (
         <Card className={`${styles.card} ${checked && styles.checked}`}>
             <Card.Body className="cardBody">
@@ -48,6 +49,15 @@ const Task = ({
                     >
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
+
+                    <Button
+                        variant="info"
+                        className="ml-3"
+                        disabled={disabled}
+                        onClick={() => toggleActiveTask(task)}
+                    >
+                        <FontAwesomeIcon icon={task.status === "active" ? faHourglassHalf : faCheckSquare} />
+                    </Button>
                 </div>
             </Card.Body>
         </Card>
@@ -63,7 +73,8 @@ Task.propTypes = {
     handleDeleteOneTask: PropTypes.func.isRequired,
     toggleSetRemoveTaskIds: PropTypes.func.isRequired,
     checked: PropTypes.bool.isRequired,
-    handleSetEditTask: PropTypes.func.isRequired
+    handleSetEditTask: PropTypes.func.isRequired,
+    toggleActiveTask:PropTypes.func.isRequired
 }
 
 export default memo(Task);
