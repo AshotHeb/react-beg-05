@@ -1,8 +1,8 @@
 import actionTypes from './actionTypes';
-
+const API_URL = process.env.REACT_APP_API_URL;
 export const setTasksThunk = () => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch("http://localhost:3001/task")
+    fetch(`${API_URL}/task`)
         .then(res => res.json())
         .then(data => {
             if (data.error) {
@@ -22,7 +22,7 @@ export const setTasksThunk = () => (dispatch) => {
 
 export const addTaskThunk = (formData) => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch("http://localhost:3001/task", {
+    fetch(`${API_URL}/task`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -47,7 +47,7 @@ export const addTaskThunk = (formData) => (dispatch) => {
 
 export const deleteOneTaskThunk = (_id) => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch("http://localhost:3001/task/" + _id, {
+    fetch(`${API_URL}/task/${_id}`, {
         method: "DELETE"
     })
         .then(res => res.json())
@@ -69,7 +69,7 @@ export const deleteOneTaskThunk = (_id) => (dispatch) => {
 
 export const editTaskThunk = (editTask) => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch("http://localhost:3001/task/" + editTask._id, {
+    fetch(`${API_URL}/task/${editTask._id}`, {
         method: "PUT",
         body: JSON.stringify(editTask),
         headers: {
@@ -95,7 +95,7 @@ export const editTaskThunk = (editTask) => (dispatch) => {
 
 export const removeAnyTasksThunk = (removeTasks) => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch("http://localhost:3001/task", {
+    fetch(`${API_URL}/task`, {
         method: "PATCH",
         body: JSON.stringify({ tasks: Array.from(removeTasks) }),
         headers: {
@@ -123,7 +123,7 @@ export const removeAnyTasksThunk = (removeTasks) => (dispatch) => {
 export const toggleActiveStatusThunk = (task) => (dispatch) => {
     const status = task.status === "active" ? "done" : "active";
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
-    fetch(`http://localhost:3001/task/${task._id}`, {
+    fetch(`${API_URL}/task/${task._id}`, {
         method: "PUT",
         body: JSON.stringify({ status }),
         headers: {
