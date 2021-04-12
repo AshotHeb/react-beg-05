@@ -32,7 +32,7 @@ class TaskActionsModal extends React.Component {
 
         const formData = { ...this.state };
         formData.date = dateFormatter(formData.date);
-        onSubmit(formData);
+        onSubmit(formData, "singleTask");
 
 
     }

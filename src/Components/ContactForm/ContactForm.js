@@ -1,10 +1,12 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Preloader from '../Preloader/Preloader';
 import styles from './form.module.css';
 import { withRouter } from 'react-router-dom';
-
+import { connect } from 'react-redux';
 import { ContactContext } from '../../Context/ContactPageContext';
-
+import actionTypes from '../../Redux/actionTypes';
+import { submitContactFormThunk } from '../../Redux/actions';
 const inputsInfo = [
     {
         name: "name",
@@ -28,7 +30,7 @@ const inputsInfo = [
     },
 
 ]
-const ContactForm = () => {
+const ContactForm = (props) => {
     const nameInputRef = useRef(null);
     const context = useContext(ContactContext);
 
@@ -36,12 +38,15 @@ const ContactForm = () => {
         nameInputRef.current.focus();
     }, []);
 
-
     const {
         formData,
+        loading,
+        //functions,
+        changeInputValue,
+        submitContactForm
+    } = props;
+    const {
         errorMessage,
-        handleChange,
-        handleSubmit
     } = context;
     const { name, email, message } = formData;
     const isValid = name.valid && email.valid && message.valid;
@@ -62,7 +67,7 @@ const ContactForm = () => {
                     as={input.as}
                     rows={input.rows}
                     value={formData[input.name].value}
-                    onChange={handleChange}
+                    onChange={(e) => changeInputValue(e.target)}
 
                 />
                 <Form.Text style={{ color: "red" }}>{formData[input.name].error}</Form.Text>
@@ -80,15 +85,31 @@ const ContactForm = () => {
                 <Button
                     variant="primary"
                     type="submit"
-                    onClick={handleSubmit}
+                    onClick={() => submitContactForm(formData, props.history)}
                     disabled={!isValid}
                 >
                     Submit
             </Button>
             </Form>
+            {
+                loading  && <Preloader />
+            }
         </div>
     );
 
 }
+const mapStateToProps = (state) => {
+    return {
+        formData: state.contactState.formData,
+        loading:state.todoState.loading
+    }
+}
 
-export default withRouter(ContactForm);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeInputValue: (target) => dispatch({ type: actionTypes.CHANGE_INPUT_VALUE, target }),
+        submitContactForm: (formData, history) => dispatch(submitContactFormThunk(formData, history))
+
+    }
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactForm));
