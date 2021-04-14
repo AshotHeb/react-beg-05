@@ -1,6 +1,8 @@
 import actionTypes from './actionTypes';
 const API_URL = process.env.REACT_APP_API_URL;
+console.log("process", process.env);
 export const setTasksThunk = () => (dispatch) => {
+    
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true });
     fetch(`${API_URL}/task`)
         .then(res => res.json())
@@ -176,7 +178,7 @@ export const sortOrFilterTasksThunk = (queryData) => (dispatch) => {
 
 export const setSingleTaskThunk = (id, history) => (dispatch) => {
     dispatch({ type: actionTypes.TOGGLE_LOADING, isLoading: true }); //Loading Started
-    fetch(`http://localhost:3001/task/${id}`)
+    fetch(`${API_URL}/task/${id}`)
         .then(res => res.json())
         .then(data => {
             if (data.error)
@@ -221,7 +223,7 @@ export const submitContactFormThunk = (formData, history) => (dispatch) => {
 
     (async () => {
         try {
-            const response = await fetch("http://localhost:3001/form", {
+            const response = await fetch(`${API_URL}/form`, {
                 method: "POST",
                 body: JSON.stringify(contactFormData),
                 headers: {
